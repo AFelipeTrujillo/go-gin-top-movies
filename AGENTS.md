@@ -165,9 +165,9 @@ All responses follow a consistent JSON envelope.
 - [x] Create `internal/Infrastructure/Persistence/gorm_imdb_repository.go` — GORM repository impl
 
 ### Phase 4: Infrastructure — Config & Delivery
-- [ ] Create `internal/Infrastructure/Config/config.go` — app configuration
-- [ ] Create `internal/Infrastructure/Delivery/Http/router.go` — Gin router setup
-- [ ] Create `internal/Infrastructure/Delivery/Http/handlers/imdb_handler.go` — Gin handlers
+- [x] Create `internal/Infrastructure/Config/config.go` — app configuration
+- [x] Create `internal/Infrastructure/Delivery/Http/router.go` — Gin router setup
+- [x] Create `internal/Infrastructure/Delivery/Http/handlers/imdb_handler.go` — Gin handlers
 
 ### Phase 5: Entry Point
 - [ ] Update `cmd/app/main.go` — wire dependencies & start server
