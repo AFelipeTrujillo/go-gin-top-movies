@@ -443,6 +443,30 @@ code {
         └── usecase_test.go            # UseCase tests with mock repository
 </div></code></pre>
 <hr>
+<h2 id="clean-architecture">Clean Architecture</h2>
+<pre class="hljs"><code><div>┌─────────────────────────────────────────────────┐
+│                  Infrastructure                 │
+│  ┌───────────────────────────────────────────┐  │
+│  │         Delivery / Http                   │  │ 
+│  │  ┌─────────────────────────────────────┐  │  │
+│  │  │       handlers/imdb_handler.go      │  │  │
+│  │  │  (Anotaciones Swagger aquí)         │  │  │
+│  │  └─────────────────────────────────────┘  │  │
+│  │  ┌─────────────────────────────────────┐  │  │
+│  │  │       router.go                     │  │  │
+│  │  │  (Ruta /swagger/*any aquí)          │  │  │
+│  │  └─────────────────────────────────────┘  │  │
+│  └───────────────────────────────────────────┘  │
+│  ┌───────────────────────────────────────────┐  │
+│  │          docs/                            │  │
+│  │  ┌─────────────────────────────────────┐  │  │
+│  │  │  docs.go (config general)           │  │  │
+│  │  │  swagger.json / swagger.yaml        │  │  │
+│  │  └─────────────────────────────────────┘  │  │
+│  └───────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────┘
+</div></code></pre>
+<hr>
 <h2 id="%F0%9F%97%84%EF%B8%8F-database-imdb-table-schema">🗄️ Database: IMDB Table Schema</h2>
 <p>The existing SQLite database <code>internal/Infrastructure/Persistence/movies.sqlite</code> contains the <code>imdb</code> table:</p>
 <pre class="hljs"><code><div><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> imdb (

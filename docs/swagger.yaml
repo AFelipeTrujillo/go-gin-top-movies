@@ -1,0 +1,299 @@
+definitions:
+  dto.ErrorResponse:
+    properties:
+      error:
+        example: movie not found
+        type: string
+    type: object
+  dto.IMDBMovieResponse:
+    properties:
+      certificate:
+        example: R
+        type: string
+      director:
+        example: Frank Darabont
+        type: string
+      genre:
+        example: Drama
+        type: string
+      gross:
+        example: $28,341,469
+        type: string
+      imdb_rating:
+        example: "9.3"
+        type: string
+      meta_score:
+        example: "80"
+        type: string
+      no_of_votes:
+        example: "2343110"
+        type: string
+      overview:
+        example: Two imprisoned men bond over a number of years, finding solace and
+          eventual redemption through acts of common decency.
+        type: string
+      poster_link:
+        example: https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_UX67_CR0,0,67,98_AL_.jpg
+        type: string
+      released_year:
+        example: "1994"
+        type: string
+      runtime:
+        example: 142 min
+        type: string
+      series_title:
+        example: The Shawshank Redemption
+        type: string
+      stars:
+        example:
+        - Tim Robbins
+        - Morgan Freeman
+        - Bob Gunton
+        items:
+          type: string
+        type: array
+    type: object
+  dto.PaginatedResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/dto.IMDBMovieResponse'
+        type: array
+      page:
+        example: 1
+        type: integer
+      page_size:
+        example: 10
+        type: integer
+      total_count:
+        example: 1000
+        type: integer
+      total_pages:
+        example: 100
+        type: integer
+    type: object
+info:
+  contact: {}
+paths:
+  /imdb:
+    get:
+      consumes:
+      - application/json
+      description: |-
+        Returns a paginated list of all movies from the IMDB database.
+        Use the "page" and "page_size" query parameters to control pagination.
+      parameters:
+      - default: 1
+        description: 'Page number (default: 1)'
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: 'Items per page (default: 10, max: 100)'
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Paginated list of movies
+          schema:
+            $ref: '#/definitions/dto.PaginatedResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: List all movies (paginated)
+      tags:
+      - movies
+  /imdb/{title}:
+    get:
+      consumes:
+      - application/json
+      description: |-
+        Returns a single movie matching the exact title specified in the URL path.
+        The title is URL-decoded automatically by Gin.
+      parameters:
+      - description: Movie title (URL encoded)
+        example: '"The Shawshank Redemption"'
+        in: path
+        name: title
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Movie found
+          schema:
+            $ref: '#/definitions/dto.IMDBMovieResponse'
+        "400":
+          description: Bad request (missing title)
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Movie not found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Get a movie by its exact title
+      tags:
+      - movies
+  /imdb/genre:
+    get:
+      consumes:
+      - application/json
+      description: |-
+        Returns a paginated list of movies filtered by genre.
+        Use the "g" query parameter to specify the genre (e.g., "Action", "Drama", "Comedy").
+      parameters:
+      - description: Genre to filter by
+        example: '"Action"'
+        in: query
+        name: g
+        required: true
+        type: string
+      - default: 1
+        description: 'Page number (default: 1)'
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: 'Items per page (default: 10, max: 100)'
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Filtered movies by genre
+          schema:
+            $ref: '#/definitions/dto.PaginatedResponse'
+        "400":
+          description: Bad request (missing genre)
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "501":
+          description: Not implemented
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Filter movies by genre
+      tags:
+      - movies
+  /imdb/search:
+    get:
+      consumes:
+      - application/json
+      description: |-
+        Searches movies where the title or overview contains the given keyword (case-insensitive).
+        Supports pagination with "page" and "page_size" parameters.
+      parameters:
+      - description: Search keyword
+        example: '"Shawshank"'
+        in: query
+        name: q
+        required: true
+        type: string
+      - default: 1
+        description: 'Page number (default: 1)'
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: 'Items per page (default: 10, max: 100)'
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Paginated search results
+          schema:
+            $ref: '#/definitions/dto.PaginatedResponse'
+        "400":
+          description: Bad request (missing query)
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Search movies by keyword
+      tags:
+      - movies
+  /imdb/top:
+    get:
+      consumes:
+      - application/json
+      description: |-
+        Returns the top N rated movies from the IMDB database.
+        Use the "n" query parameter to control how many movies to return (default: 10).
+      parameters:
+      - default: 10
+        description: 'Number of top movies to return (default: 10)'
+        in: query
+        name: "n"
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Top rated movies
+          schema:
+            $ref: '#/definitions/dto.PaginatedResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Get top rated movies
+      tags:
+      - movies
+  /imdb/year:
+    get:
+      consumes:
+      - application/json
+      description: |-
+        Returns a paginated list of movies filtered by release year.
+        Use the "y" query parameter to specify the year (e.g., "1994", "2020").
+      parameters:
+      - description: Release year to filter by
+        example: 1994
+        in: query
+        name: "y"
+        required: true
+        type: integer
+      - default: 1
+        description: 'Page number (default: 1)'
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: 'Items per page (default: 10, max: 100)'
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Filtered movies by year
+          schema:
+            $ref: '#/definitions/dto.PaginatedResponse'
+        "400":
+          description: Bad request (missing or invalid year)
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "501":
+          description: Not implemented
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Filter movies by release year
+      tags:
+      - movies
+swagger: "2.0"

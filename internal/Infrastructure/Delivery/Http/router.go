@@ -3,12 +3,23 @@ package http
 import (
 	"github.com/afelipetrujillo/go-gin-top-movies/internal/Infrastructure/Delivery/Http/handlers"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 // SetupRouter configures the Gin router with all movie-related endpoints.
 // It receives the handler struct (which holds the use cases) and registers routes.
 func SetupRouter(movieHandler *handlers.IMDBHandler) *gin.Engine {
 	router := gin.Default()
+
+	// Swagger documentation endpoint
+	// Serves the SwaggerUI at /swagger/index.html
+	// The swagger.json is served via the built-in gin-swagger handler
+	// which reads from the registered docs.SwaggerInfo instance.
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(
+		swaggerFiles.Handler,
+		ginSwagger.InstanceName("swagger"),
+	))
 
 	// IMDB movie routes
 	imdbGroup := router.Group("/imdb")
