@@ -155,10 +155,10 @@ All responses follow a consistent JSON envelope.
 - [x] Create `internal/Domain/Repository/imdb_movie_repository.go` — repository interface
 
 ### Phase 2: Application Layer
-- [ ] Create `internal/Application/DTO/imdb_movie_dto.go` — request/response DTOs
-- [ ] Create `internal/Application/UseCase/get_all_movies.go` — paginated list use case
-- [ ] Create `internal/Application/UseCase/get_movie_by_title.go` — title lookup use case
-- [ ] Create `internal/Application/UseCase/search_movies.go` — keyword search use case
+- [x] Create `internal/Application/DTO/imdb_movie_dto.go` — request/response DTOs
+- [x] Create `internal/Application/UseCase/get_all_movies.go` — paginated list use case
+- [x] Create `internal/Application/UseCase/get_movie_by_title.go` — title lookup use case
+- [x] Create `internal/Application/UseCase/search_movies.go` — keyword search use case
 
 ### Phase 3: Infrastructure — Persistence
 - [ ] Create `internal/Infrastructure/Persistence/models/imdb_movie_model.go` — GORM model
