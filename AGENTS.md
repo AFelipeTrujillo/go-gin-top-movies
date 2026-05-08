@@ -148,11 +148,11 @@ All responses follow a consistent JSON envelope.
 ## ✅ TODO List
 
 ### Phase 1: Domain Layer
-- [ ] Create `internal/Domain/Entity/imdb_movie.go` — pure `IMDBMovie` struct
-- [ ] Create `internal/Domain/ValueObject/imdb_rating.go` — `IMDBRating` type with validation
-- [ ] Create `internal/Domain/ValueObject/year.go` — `Year` type
-- [ ] Create `internal/Domain/Exception/errors.go` — custom domain errors
-- [ ] Create `internal/Domain/Repository/imdb_movie_repository.go` — repository interface
+- [x] Create `internal/Domain/Entity/imdb_movie.go` — pure `IMDBMovie` struct
+- [x] Create `internal/Domain/ValueObject/imdb_rating.go` — `IMDBRating` type with validation
+- [x] Create `internal/Domain/ValueObject/year.go` — `Year` type
+- [x] Create `internal/Domain/Exception/errors.go` — custom domain errors
+- [x] Create `internal/Domain/Repository/imdb_movie_repository.go` — repository interface
 
 ### Phase 2: Application Layer
 - [ ] Create `internal/Application/DTO/imdb_movie_dto.go` — request/response DTOs
