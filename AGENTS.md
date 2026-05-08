@@ -170,7 +170,7 @@ All responses follow a consistent JSON envelope.
 - [x] Create `internal/Infrastructure/Delivery/Http/handlers/imdb_handler.go` — Gin handlers
 
 ### Phase 5: Entry Point
-- [ ] Update `cmd/app/main.go` — wire dependencies & start server
+- [X] Update `cmd/app/main.go` — wire dependencies & start server
 
 ### Phase 6: Dependencies
 - [ ] Update `go.mod` — add `gin`, `gorm`, `sqlite` driver dependencies
