@@ -23,7 +23,7 @@ func NewGORMIMDBRepository(db *gorm.DB) *GORMIMDBRepository {
 
 // GetAll returns a paginated list of movies and the total count.
 func (r *GORMIMDBRepository) GetAll(page, pageSize int) ([]entity.IMDBMovie, int64, error) {
-	var models []models.IMDBMovieModel
+	var modelList []models.IMDBMovieModel
 	var totalCount int64
 
 	// Get total count
@@ -36,11 +36,11 @@ func (r *GORMIMDBRepository) GetAll(page, pageSize int) ([]entity.IMDBMovie, int
 	if err := r.db.Order("Series_Title ASC").
 		Offset(offset).
 		Limit(pageSize).
-		Find(&models).Error; err != nil {
+		Find(&modelList).Error; err != nil {
 		return nil, 0, fmt.Errorf("failed to list movies: %w", err)
 	}
 
-	return models.ToEntitySlice(models), totalCount, nil
+	return models.ToEntitySlice(modelList), totalCount, nil
 }
 
 // GetByTitle returns a movie by its exact title.
@@ -61,7 +61,7 @@ func (r *GORMIMDBRepository) GetByTitle(title string) (*entity.IMDBMovie, error)
 
 // Search returns movies matching a keyword in title or overview.
 func (r *GORMIMDBRepository) Search(query string, page, pageSize int) ([]entity.IMDBMovie, int64, error) {
-	var models []models.IMDBMovieModel
+	var modelList []models.IMDBMovieModel
 	var totalCount int64
 
 	likePattern := "%" + strings.TrimSpace(query) + "%"
@@ -80,32 +80,32 @@ func (r *GORMIMDBRepository) Search(query string, page, pageSize int) ([]entity.
 		Order("Series_Title ASC").
 		Offset(offset).
 		Limit(pageSize).
-		Find(&models).Error; err != nil {
+		Find(&modelList).Error; err != nil {
 		return nil, 0, fmt.Errorf("failed to search movies: %w", err)
 	}
 
-	return models.ToEntitySlice(models), totalCount, nil
+	return models.ToEntitySlice(modelList), totalCount, nil
 }
 
 // GetTopRated returns the top n movies by IMDB rating.
 func (r *GORMIMDBRepository) GetTopRated(n int) ([]entity.IMDBMovie, error) {
-	var models []models.IMDBMovieModel
+	var modelList []models.IMDBMovieModel
 
 	// We need to cast the TEXT IMDB_Rating to REAL for proper numeric ordering.
 	// SQLite supports CAST() for this purpose.
 	if err := r.db.
 		Order("CAST(IMDB_Rating AS REAL) DESC, No_of_Votes DESC").
 		Limit(n).
-		Find(&models).Error; err != nil {
+		Find(&modelList).Error; err != nil {
 		return nil, fmt.Errorf("failed to get top rated movies: %w", err)
 	}
 
-	return models.ToEntitySlice(models), nil
+	return models.ToEntitySlice(modelList), nil
 }
 
 // GetByGenre returns movies filtered by genre.
 func (r *GORMIMDBRepository) GetByGenre(genre string, page, pageSize int) ([]entity.IMDBMovie, int64, error) {
-	var models []models.IMDBMovieModel
+	var modelList []models.IMDBMovieModel
 	var totalCount int64
 
 	likePattern := "%" + strings.TrimSpace(genre) + "%"
@@ -124,16 +124,16 @@ func (r *GORMIMDBRepository) GetByGenre(genre string, page, pageSize int) ([]ent
 		Order("Series_Title ASC").
 		Offset(offset).
 		Limit(pageSize).
-		Find(&models).Error; err != nil {
+		Find(&modelList).Error; err != nil {
 		return nil, 0, fmt.Errorf("failed to get movies by genre: %w", err)
 	}
 
-	return models.ToEntitySlice(models), totalCount, nil
+	return models.ToEntitySlice(modelList), totalCount, nil
 }
 
 // GetByYear returns movies filtered by release year.
 func (r *GORMIMDBRepository) GetByYear(year int, page, pageSize int) ([]entity.IMDBMovie, int64, error) {
-	var models []models.IMDBMovieModel
+	var modelList []models.IMDBMovieModel
 	var totalCount int64
 
 	yearStr := fmt.Sprintf("%d", year)
@@ -152,9 +152,9 @@ func (r *GORMIMDBRepository) GetByYear(year int, page, pageSize int) ([]entity.I
 		Order("Series_Title ASC").
 		Offset(offset).
 		Limit(pageSize).
-		Find(&models).Error; err != nil {
+		Find(&modelList).Error; err != nil {
 		return nil, 0, fmt.Errorf("failed to get movies by year: %w", err)
 	}
 
-	return models.ToEntitySlice(models), totalCount, nil
+	return models.ToEntitySlice(modelList), totalCount, nil
 }

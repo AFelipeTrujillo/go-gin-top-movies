@@ -161,8 +161,8 @@ All responses follow a consistent JSON envelope.
 - [x] Create `internal/Application/UseCase/search_movies.go` — keyword search use case
 
 ### Phase 3: Infrastructure — Persistence
-- [ ] Create `internal/Infrastructure/Persistence/models/imdb_movie_model.go` — GORM model
-- [ ] Create `internal/Infrastructure/Persistence/gorm_imdb_repository.go` — GORM repository impl
+- [x] Create `internal/Infrastructure/Persistence/models/imdb_movie_model.go` — GORM model
+- [x] Create `internal/Infrastructure/Persistence/gorm_imdb_repository.go` — GORM repository impl
 
 ### Phase 4: Infrastructure — Config & Delivery
 - [ ] Create `internal/Infrastructure/Config/config.go` — app configuration
